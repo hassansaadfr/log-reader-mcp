@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "main": "dist/mcp-server.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hassansaadfr/mcp-log-server.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/mcp-server.js",
