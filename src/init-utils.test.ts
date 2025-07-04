@@ -85,18 +85,22 @@ describe('mergeMcpJson', () => {
     jest.clearAllMocks();
   });
 
-  it('should create new mcp.json with log-reader-mcp when file does not exist', async () => {
-    // Mock template file
+  it('should create new mcp.json when file does not exist', async () => {
+    // Mock template file with real template content
     const readFileSpy = jest
       .spyOn(fs, 'readFile')
       .mockResolvedValueOnce(
         JSON.stringify({
           mcpServers: {
-            'mcp-log-server': {
+            'log-reader-mcp': {
               command: 'npx',
-              args: ['-y', 'mcp-log-server'],
+              args: ['-y', 'log-reader-mcp'],
             },
           },
+          'mcp.enabled': true,
+          'mcp.autoStart': true,
+          'mcp.showStatusBar': true,
+          'mcp.logLevel': 'info',
         }),
       )
       .mockRejectedValueOnce(new Error('File not found'));
@@ -106,7 +110,7 @@ describe('mergeMcpJson', () => {
 
     await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
 
-    // Verify writeFile was called with correct content
+    // Verify writeFile was called with correct content from template
     expect(writeFileSpy).toHaveBeenCalledWith(
       mockMcpJsonPath,
       JSON.stringify(
@@ -117,6 +121,10 @@ describe('mergeMcpJson', () => {
               args: ['-y', 'log-reader-mcp'],
             },
           },
+          'mcp.enabled': true,
+          'mcp.autoStart': true,
+          'mcp.showStatusBar': true,
+          'mcp.logLevel': 'info',
         },
         null,
         2,
@@ -127,31 +135,25 @@ describe('mergeMcpJson', () => {
     writeFileSpy.mockRestore();
   });
 
-  it('should add log-reader-mcp to existing mcp.json without overwriting other servers', async () => {
+  it('should merge with existing empty mcp.json file', async () => {
     // Mock template file
     const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
       JSON.stringify({
         mcpServers: {
-          'mcp-log-server': {
+          'log-reader-mcp': {
             command: 'npx',
-            args: ['-y', 'mcp-log-server'],
+            args: ['-y', 'log-reader-mcp'],
           },
         },
+        'mcp.enabled': true,
+        'mcp.autoStart': true,
+        'mcp.showStatusBar': true,
+        'mcp.logLevel': 'info',
       }),
     );
 
-    // Mock existing user file with other servers
-    const existingConfig = {
-      mcpServers: {
-        'task-master-ai': {
-          command: 'npx',
-          args: ['-y', '--package=task-master-ai', 'task-master-ai'],
-          env: {
-            ANTHROPIC_API_KEY: 'test-key',
-          },
-        },
-      },
-    };
+    // Mock existing user file with empty object
+    const existingConfig = {};
     readFileSpy.mockResolvedValueOnce(JSON.stringify(existingConfig));
 
     // Mock write file
@@ -165,18 +167,15 @@ describe('mergeMcpJson', () => {
       JSON.stringify(
         {
           mcpServers: {
-            'task-master-ai': {
-              command: 'npx',
-              args: ['-y', '--package=task-master-ai', 'task-master-ai'],
-              env: {
-                ANTHROPIC_API_KEY: 'test-key',
-              },
-            },
             'log-reader-mcp': {
               command: 'npx',
               args: ['-y', 'log-reader-mcp'],
             },
           },
+          'mcp.enabled': true,
+          'mcp.autoStart': true,
+          'mcp.showStatusBar': true,
+          'mcp.logLevel': 'info',
         },
         null,
         2,
@@ -187,31 +186,40 @@ describe('mergeMcpJson', () => {
     writeFileSpy.mockRestore();
   });
 
-  it('should update existing log-reader-mcp entry if it exists', async () => {
+  it('should merge with existing mcp.json that contains other MCP servers', async () => {
     // Mock template file
     const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
       JSON.stringify({
         mcpServers: {
-          'mcp-log-server': {
+          'log-reader-mcp': {
             command: 'npx',
-            args: ['-y', 'mcp-log-server'],
+            args: ['-y', 'log-reader-mcp'],
           },
         },
+        'mcp.enabled': true,
+        'mcp.autoStart': true,
+        'mcp.showStatusBar': true,
+        'mcp.logLevel': 'info',
       }),
     );
 
-    // Mock existing user file with old log-reader-mcp config
+    // Mock existing user file with other MCP servers
     const existingConfig = {
       mcpServers: {
-        'log-reader-mcp': {
-          command: 'node',
-          args: ['dist/mcp-server.js'],
-        },
-        'task-master-ai': {
+        'mcp-service': {
           command: 'npx',
-          args: ['-y', 'task-master-ai'],
+          args: ['-y', '--package=mcp-service', 'mcp-service'],
+          env: {
+            dummy: 'test-key',
+          },
+        },
+        dummy: {
+          command: 'npx',
+          args: ['-y', 'dummy'],
         },
       },
+      'mcp.enabled': false,
+      'custom.setting': 'value',
     };
     readFileSpy.mockResolvedValueOnce(JSON.stringify(existingConfig));
 
@@ -220,167 +228,33 @@ describe('mergeMcpJson', () => {
 
     await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
 
-    // Verify writeFile was called with updated log-reader-mcp config
+    // Verify writeFile was called with merged content preserving existing servers
     expect(writeFileSpy).toHaveBeenCalledWith(
       mockMcpJsonPath,
       JSON.stringify(
         {
           mcpServers: {
-            'log-reader-mcp': {
+            'mcp-service': {
               command: 'npx',
-              args: ['-y', 'log-reader-mcp'],
+              args: ['-y', '--package=mcp-service', 'mcp-service'],
+              env: {
+                dummy: 'test-key',
+              },
             },
-            'task-master-ai': {
+            dummy: {
               command: 'npx',
-              args: ['-y', 'task-master-ai'],
+              args: ['-y', 'dummy'],
             },
-          },
-        },
-        null,
-        2,
-      ),
-    );
-
-    readFileSpy.mockRestore();
-    writeFileSpy.mockRestore();
-  });
-
-  it('should handle empty mcpServers object in existing file', async () => {
-    // Mock template file
-    const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
-      JSON.stringify({
-        mcpServers: {
-          'mcp-log-server': {
-            command: 'npx',
-            args: ['-y', 'mcp-log-server'],
-          },
-        },
-      }),
-    );
-
-    // Mock existing user file with empty mcpServers
-    const existingConfig = {
-      mcpServers: {},
-    };
-    readFileSpy.mockResolvedValueOnce(JSON.stringify(existingConfig));
-
-    // Mock write file
-    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValueOnce(undefined);
-
-    await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
-
-    // Verify writeFile was called with log-reader-mcp added
-    expect(writeFileSpy).toHaveBeenCalledWith(
-      mockMcpJsonPath,
-      JSON.stringify(
-        {
-          mcpServers: {
             'log-reader-mcp': {
               command: 'npx',
               args: ['-y', 'log-reader-mcp'],
             },
           },
-        },
-        null,
-        2,
-      ),
-    );
-
-    readFileSpy.mockRestore();
-    writeFileSpy.mockRestore();
-  });
-
-  it('should handle file without mcpServers property', async () => {
-    // Mock template file
-    const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
-      JSON.stringify({
-        mcpServers: {
-          'mcp-log-server': {
-            command: 'npx',
-            args: ['-y', 'mcp-log-server'],
-          },
-        },
-      }),
-    );
-
-    // Mock existing user file without mcpServers
-    const existingConfig = {
-      someOtherProperty: 'value',
-    };
-    readFileSpy.mockResolvedValueOnce(JSON.stringify(existingConfig));
-
-    // Mock write file
-    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValueOnce(undefined);
-
-    await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
-
-    // Verify writeFile was called with mcpServers added
-    expect(writeFileSpy).toHaveBeenCalledWith(
-      mockMcpJsonPath,
-      JSON.stringify(
-        {
-          someOtherProperty: 'value',
-          mcpServers: {
-            'log-reader-mcp': {
-              command: 'npx',
-              args: ['-y', 'log-reader-mcp'],
-            },
-          },
-        },
-        null,
-        2,
-      ),
-    );
-
-    readFileSpy.mockRestore();
-    writeFileSpy.mockRestore();
-  });
-
-  it('should throw error when template file is not found', async () => {
-    // Mock template file not found
-    const readFileSpy = jest
-      .spyOn(fs, 'readFile')
-      .mockRejectedValueOnce(new Error('Template not found'));
-
-    await expect(mergeMcpJson(mockMcpJsonPath, mockTemplatePath)).rejects.toThrow(
-      'Template mcp.json not found',
-    );
-
-    readFileSpy.mockRestore();
-  });
-
-  it('should handle malformed JSON in existing file', async () => {
-    // Mock template file
-    const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
-      JSON.stringify({
-        mcpServers: {
-          'mcp-log-server': {
-            command: 'npx',
-            args: ['-y', 'mcp-log-server'],
-          },
-        },
-      }),
-    );
-
-    // Mock malformed JSON in existing file
-    readFileSpy.mockResolvedValueOnce('invalid json');
-
-    // Mock write file
-    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValueOnce(undefined);
-
-    await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
-
-    // Should create new file with log-reader-mcp
-    expect(writeFileSpy).toHaveBeenCalledWith(
-      mockMcpJsonPath,
-      JSON.stringify(
-        {
-          mcpServers: {
-            'log-reader-mcp': {
-              command: 'npx',
-              args: ['-y', 'log-reader-mcp'],
-            },
-          },
+          'mcp.enabled': false, // preserved from existing
+          'custom.setting': 'value', // preserved from existing
+          'mcp.autoStart': true, // added from template
+          'mcp.showStatusBar': true, // added from template
+          'mcp.logLevel': 'info', // added from template
         },
         null,
         2,

@@ -64,10 +64,9 @@ export async function mergeMcpJson(mcpJsonPath: string, templatePath: string): P
     // File doesn't exist, start with empty config
   }
   userJson.mcpServers = userJson.mcpServers || {};
-  (userJson.mcpServers as Record<string, unknown>)['log-reader-mcp'] = {
-    command: 'npx',
-    args: ['-y', 'log-reader-mcp'],
-  };
+  (userJson.mcpServers as Record<string, unknown>)['log-reader-mcp'] = (
+    template.mcpServers as Record<string, unknown>
+  )['log-reader-mcp'];
   // Merge autres clés du template si pas présentes
   for (const key of Object.keys(template)) {
     if (key !== 'mcpServers' && !(key in userJson)) {
