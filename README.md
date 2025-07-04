@@ -1,8 +1,8 @@
-# mcp-log-reader
+# Mcp-log-reader
 
 ## Overview
 
-`mcp-log-reader` is an MCP-compatible log server for structured JSON logging and log analysis, designed to work seamlessly with editors like Cursor, VSCode, and others supporting the Model Control Protocol (MCP).
+`Mcp-log-reader` is an MCP-compatible log server for structured JSON logging and log analysis, designed to work seamlessly with editors like Cursor, VSCode, and others supporting the Model Control Protocol (MCP).
 
 ---
 
