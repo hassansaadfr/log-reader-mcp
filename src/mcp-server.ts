@@ -32,7 +32,7 @@ server.tool(
   async ({ lines, start_time, end_time }) => {
     try {
       // Utiliser toujours le chemin relatif logs/logs.log dans le répertoire courant
-      const logPath = path.join(process.cwd(), 'logs', 'logs.log');
+      const logPath = path.resolve(process.cwd(), 'logs', 'logs.log');
 
       const validLogs = await readAndValidateLogs({
         logPath,

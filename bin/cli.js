@@ -162,7 +162,17 @@ function runServer() {
   const dist = path.join(__dirname, '../dist/mcp-server.js');
   const src = path.join(__dirname, '../src/mcp-server.ts');
   const entry = fs.existsSync(dist) ? dist : src;
-  const child = spawn('node', [entry, ...args], { stdio: 'inherit' });
+
+  // Pour MCP, on doit utiliser stdio: 'pipe' pour que le protocole fonctionne
+  const child = spawn('node', [entry, ...args], {
+    stdio: ['pipe', 'pipe', 'pipe'],
+  });
+
+  // Rediriger stdin/stdout/stderr pour le protocole MCP
+  process.stdin.pipe(child.stdin);
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
+
   child.on('exit', (code) => process.exit(code));
 }
 
