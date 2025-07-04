@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CURSOR_DIR = path.resolve(process.cwd(), ".cursor");
 const CURSOR_MCP_JSON = path.join(CURSOR_DIR, "mcp.json");
-const TEMPLATE_MCP_JSON = path.resolve("templates/mcp.json");
-const TEMPLATE_RULES = path.resolve("templates/mcp-log-server/workflow.mdc");
+const TEMPLATE_MCP_JSON = path.join(__dirname, "../templates/mcp.json");
+const TEMPLATE_RULES = path.join(
+  __dirname,
+  "../templates/mcp-log-server/workflow.mdc"
+);
 const CURSOR_RULES = path.join(CURSOR_DIR, "mcp-log-reader", "workflow.mdc");
 
 async function ensureCursorDir() {
@@ -28,7 +35,7 @@ async function mergeMcpJson() {
     userJson = JSON.parse(await fs.readFile(CURSOR_MCP_JSON, "utf-8"));
   } catch {}
   userJson.mcpServers = userJson.mcpServers || {};
-  userJson.mcpServers["mcp-log-reader"] = template.mcpServers["mcp-log-reader"];
+  userJson.mcpServers["mcp-log-server"] = template.mcpServers["mcp-log-server"];
   // Merge other top-level keys if not present
   for (const key of Object.keys(template)) {
     if (key !== "mcpServers" && !(key in userJson)) {
