@@ -74,6 +74,13 @@ The server will be available for your editor's MCP integration if configured in 
 }
 ```
 
+### CLI Usage
+
+- `npx mcp-log-reader init` : Initialize MCP config and rules in your project
+- `npx mcp-log-reader -h` ou `--help` : Show help and usage instructions
+- `npx mcp-log-reader -v` ou `--version` : Show the current version of the package
+- `npx mcp-log-reader` : Start the MCP log server
+
 ---
 
 ## Developer Guide
