@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "mcp-log-reader": {
+    "log-reader-mcp": {
       "command": "node",
       "args": ["dist/mcp-server.js"],
       "env": {

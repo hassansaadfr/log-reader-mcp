@@ -18,7 +18,7 @@ function showHelp() {
   console.log(chalk.bold.blue('\nMCP Log Server - Complete Setup Guide\n'));
 
   console.log(chalk.bold('USAGE:'));
-  console.log('  ' + chalk.cyan('npx mcp-log-reader [COMMAND] [OPTIONS]'));
+  console.log('  ' + chalk.cyan('npx log-reader-mcp [COMMAND] [OPTIONS]'));
 
   console.log(chalk.bold('\nCOMMANDS:'));
   console.log(
@@ -31,7 +31,7 @@ function showHelp() {
   );
   console.log(
     '      - Copies the logging workflow rules to ' +
-      chalk.yellow('.cursor/mcp-log-reader/workflow.mdc') +
+      chalk.yellow('.cursor/log-reader-mcp/workflow.mdc') +
       '.',
   );
   console.log(
@@ -58,7 +58,7 @@ function showHelp() {
   );
 
   console.log(chalk.green('1. Initialize MCP configuration in your project:'));
-  console.log('   ' + chalk.cyan('npx mcp-log-reader init'));
+  console.log('   ' + chalk.cyan('npx log-reader-mcp init'));
   console.log('   This command will:');
   console.log(
     '   - Create or update ' +
@@ -67,7 +67,7 @@ function showHelp() {
   );
   console.log(
     '   - Copy the logging workflow rules to ' +
-      chalk.yellow('.cursor/mcp-log-reader/workflow.mdc'),
+      chalk.yellow('.cursor/log-reader-mcp/workflow.mdc'),
   );
 
   console.log(chalk.green('\n2. Configure your MCP server in .cursor/mcp.json:'));
@@ -93,7 +93,7 @@ function showHelp() {
   console.log(chalk.green('\n3. Logging rules template:'));
   console.log(
     '   The file ' +
-      chalk.yellow('.cursor/mcp-log-reader/workflow.mdc') +
+      chalk.yellow('.cursor/log-reader-mcp/workflow.mdc') +
       ' defines the logging standards and usage examples.',
   );
   console.log('   It is used by the AI agent and developers to ensure log compliance.');
@@ -140,7 +140,7 @@ function showHelp() {
   );
 
   console.log(chalk.green('\n6. Typical usage:'));
-  console.log('   - To initialize your project: ' + chalk.cyan('npx mcp-log-reader init'));
+  console.log('   - To initialize your project: ' + chalk.cyan('npx log-reader-mcp init'));
   console.log('   - To start the MCP log server: ' + chalk.cyan('npx mcp-log-server'));
   console.log('   - Your editor will use the MCP server as soon as the config is detected.');
 

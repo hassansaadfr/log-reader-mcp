@@ -1,6 +1,6 @@
 {
   "server": {
-    "name": "mcp-log-reader",
+    "name": "log-reader-mcp",
     "version": "1.0.0",
     "description": "MCP server for log management"
   },

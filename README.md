@@ -1,15 +1,15 @@
-# 🚀 MCP Log Reader
+# 🚀 Log Reader Mcp
 
-![npm](https://img.shields.io/npm/v/mcp-log-reader)
-![build](https://github.com/hassansaadfr/mcp-log-reader/actions/workflows/ci.yml/badge.svg)
-![license](https://img.shields.io/github/license/hassansaadfr/mcp-log-reader)
+![npm](https://img.shields.io/npm/v/log-reader-mcp)
+![build](https://github.com/hassansaadfr/log-reader-mcp/actions/workflows/ci.yml/badge.svg)
+![license](https://img.shields.io/github/license/hassansaadfr/log-reader-mcp)
 
 > 🚀 **Stop wasting time copy-pasting logs!**<br>
 > 🧠 **Let Cursor's AI instantly access, search, and explain your logs — no more manual work, just answers.**
 
 ## 📚 Table of Contents
 
-- [Why MCP Log Reader?](#-why-mcp-log-reader)
+- [Why Log Reader Mcp?](#-why-log-reader-mcp)
 - [Installation](#-installation)
   - [Automatic (recommended)](#-automatic-recommended)
   - [Manual](#-manual)
@@ -28,7 +28,7 @@
 
 ---
 
-## ✨ Why MCP Log Reader?
+## ✨ Why Log Reader Mcp?
 
 - 🤖 **AI-powered log access**: Give your AI assistant (Cursor, etc.) direct, on-demand access to your app logs.
 - 🧠 **Smarter debugging**: Let the AI analyze, summarize, and explain logs as you code.
@@ -52,7 +52,7 @@
 ### 🚀 Automatic (recommended)
 
 ```sh
-npx mcp-log-reader init
+npx log-reader-mcp init
 ```
 
 - Installs everything, creates `.cursor/mcp.json` and workflow rules, and sets up your logs folder automatically.
@@ -61,7 +61,7 @@ npx mcp-log-reader init
 
 1. **Install the package**
    ```sh
-   npm install --save-dev mcp-log-reader
+   npm install --save-dev log-reader-mcp
    ```
 2. **Create the config file**
    - At the root of your project, create a folder named `.cursor` (if it doesn't exist).
@@ -70,9 +70,9 @@ npx mcp-log-reader init
    ```json
    {
      "mcpServers": {
-       "mcp-log-reader": {
+       "log-reader-mcp": {
          "command": "npx",
-         "args": ["-y", "mcp-log-reader"]
+         "args": ["-y", "log-reader-mcp"]
        }
      },
      "mcp.enabled": true,
@@ -82,13 +82,13 @@ npx mcp-log-reader init
    }
    ```
 
-   - This tells your editor (Cursor, VSCode, etc.) how to launch and connect to the MCP Log Reader server for your project.
+   - This tells your editor (Cursor, VSCode, etc.) how to launch and connect to the log reader mcp server for your project.
 
 ---
 
 ## 🖼️ What does it do?
 
-**MCP Log Reader** exposes your application's logs to your AI assistant/editor (like Cursor) via the Model Control Protocol (MCP). This means:
+**Log Reader Mcp** exposes your application's logs to your AI assistant/editor (like Cursor) via the Model Control Protocol (MCP). This means:
 
 - The AI can read, filter, and analyze your logs on demand (not streaming)
 - You can ask the AI to fetch logs for a specific period, number of lines, error level, etc.
@@ -111,13 +111,13 @@ Here are some real-world prompts you can use in Cursor (or any MCP-enabled AI) t
 | 📊 Summary         | `Summarize the main issues found in today's logs`           |
 | 🧹 Clear context   | `Clear the log context and start a new analysis`            |
 
-> **Tip:** You can combine filters, time ranges, and keywords in your prompts. The AI will use MCP Log Reader to fetch and analyze the relevant log data for you!
+> **Tip:** You can combine filters, time ranges, and keywords in your prompts. The AI will use Log Reader Mcp to fetch and analyze the relevant log data for you!
 
 ---
 
 ## 💡 Use Cases
 
-| Use Case               | How MCP Log Reader Helps                                    | Time Saved         |
+| Use Case               | How Log Reader Mcp Helps                                    | Time Saved         |
 | ---------------------- | ----------------------------------------------------------- | ------------------ |
 | 🐞 Real-time debugging | See errors & warnings instantly in Cursor, with AI context  | Minutes per bug    |
 | 🔍 AI log analysis     | Let the AI summarize, filter, and explain log events        | Hours per incident |
@@ -132,9 +132,9 @@ Here are some real-world prompts you can use in Cursor (or any MCP-enabled AI) t
 ```json
 {
   "mcpServers": {
-    "mcp-log-reader": {
+    "log-reader-mcp": {
       "command": "npx",
-      "args": ["-y", "mcp-log-reader"]
+      "args": ["-y", "log-reader-mcp"]
     }
   },
   "mcp.enabled": true,
@@ -153,10 +153,10 @@ Here are some real-world prompts you can use in Cursor (or any MCP-enabled AI) t
 
 | Command                           | Effect                                  |
 | --------------------------------- | --------------------------------------- |
-| `npx mcp-log-reader init`         | Initialize MCP config and log workflow  |
-| `npx mcp-log-reader -h/--help`    | Show help and CLI options               |
-| `npx mcp-log-reader -v/--version` | Show the current package version        |
-| `npx mcp-log-reader`              | Start the MCP log server (default mode) |
+| `npx log-reader-mcp init`         | Initialize MCP config and log workflow  |
+| `npx log-reader-mcp -h/--help`    | Show help and CLI options               |
+| `npx log-reader-mcp -v/--version` | Show the current package version        |
+| `npx log-reader-mcp`              | Start the MCP log server (default mode) |
 
 ---
 
@@ -224,8 +224,8 @@ To help Cursor (or any MCP-compatible AI) understand your log structure and best
 ### How to add the Cursor rule
 
 1. **Copy the template**
-   - Use the command: `npx mcp-log-reader init` (recommended)
-   - Or manually copy `templates/mcp-log-server/workflow.mdc` to `.cursor/mcp-log-reader/workflow.mdc` at the root of your project.
+   - Use the command: `npx log-reader-mcp init` (recommended)
+   - Or manually copy `templates/mcp-log-server/workflow.mdc` to `.cursor/log-reader-mcp/workflow.mdc` at the root of your project.
 
 2. **What does this rule do?**
    - It describes the log file location, format, and usage standards for your project.
@@ -236,7 +236,7 @@ To help Cursor (or any MCP-compatible AI) understand your log structure and best
 
 ```yaml
 ---
-description: Guide for using mcp-log-reader
+description: Guide for using log-reader-mcp
 globs: **/*
 alwaysApply: true
 ---
@@ -287,8 +287,8 @@ A: Yes! The tool never modifies your logs, only reads them, and is fully tested.
 
 ## 💬 Getting Help
 
-- Open an [issue](https://github.com/hassansaadfr/mcp-log-reader/issues) for bugs or questions
-- Join the discussion on [GitHub Discussions](https://github.com/hassansaadfr/mcp-log-reader/discussions)
+- Open an [issue](https://github.com/hassansaadfr/log-reader-mcp/issues) for bugs or questions
+- Join the discussion on [GitHub Discussions](https://github.com/hassansaadfr/log-reader-mcp/discussions)
 - See the [Cursor Rule Template](./templates/mcp-log-server/workflow.mdc) for advanced configuration
 
 ---

@@ -10,7 +10,7 @@ const CURSOR_DIR = path.resolve(process.cwd(), '.cursor');
 const CURSOR_MCP_JSON = path.join(CURSOR_DIR, 'mcp.json');
 const TEMPLATE_MCP_JSON = path.join(__dirname, '../templates/mcp.json');
 const TEMPLATE_RULES = path.join(__dirname, '../templates/mcp-log-server/workflow.mdc');
-const CURSOR_RULES = path.join(CURSOR_DIR, 'mcp-log-reader', 'workflow.mdc');
+const CURSOR_RULES = path.join(CURSOR_DIR, 'log-reader-mcp', 'workflow.mdc');
 
 async function ensureCursorDir() {
   try {
