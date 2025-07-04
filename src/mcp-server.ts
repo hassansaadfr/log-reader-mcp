@@ -32,7 +32,10 @@ server.tool(
   async ({ lines, start_time, end_time }) => {
     try {
       // Utiliser toujours le chemin relatif logs/logs.log dans le répertoire courant
-      const logPath = path.resolve(process.cwd(), 'logs', 'logs.log');
+      const logsDir = path.resolve(process.cwd(), 'logs');
+      const logPath = path.join(logsDir, 'logs.log');
+
+      // const logPath = path.resolve(process.cwd(), 'logs', 'logs.log');
 
       const validLogs = await readAndValidateLogs({
         logPath,
@@ -78,7 +81,6 @@ server.tool(
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log('MCP Log Server started and ready to receive requests');
 }
 
 main().catch((error) => {

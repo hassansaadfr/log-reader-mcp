@@ -1,0 +1,89 @@
+# MCP Logging Workflow
+
+This guide defines the standards for log management in a project using the MCP server. It is intended for the AI agent and anyone developing on this project.
+
+## Log Structure and Location
+
+- **Required folder**: Every project must have a `logs/` folder at the root.
+- **Log file**: The main log file must be named `logs.log` and placed in this folder.
+
+## Log Format
+
+- **Structured JSON format**: Each line in the `logs.log` file must be a JSON object following the schema below (see also the definition in `@mcp-server.ts`):
+
+```json
+{
+  "level": "INFO|WARN|ERROR|DEBUG|CRITICAL",
+  "timestamp": "YYYY-MM-DDTHH:MM:SS.sssZ",
+  "message": "string",
+  "service_name": "string (optional)",
+  "user_id": "string (optional)",
+  "context": { ... } (optional),
+  "event": { ... } (optional)
+}
+```
+
+- **Example**:
+
+```json
+{
+  "level": "INFO",
+  "timestamp": "2025-06-01T12:34:56.789Z",
+  "message": "User login succeeded",
+  "service_name": "auth",
+  "user_id": "12345",
+  "context": { "ip": "192.168.1.10" },
+  "event": { "action": "login" }
+}
+```
+
+- **Schema compliance**: Always use the project's logging utility function (or the MCP API) to ensure format compliance. Never write directly to the file without validation.
+
+## Using the `read_log` Tool
+
+- **MCP Tool**: The server exposes the `read_log` tool to read the last lines of the log file, with optional time interval filtering.
+- **Main arguments**:
+  - `lines`: number of lines to read (default: 50)
+  - `start_time` / `end_time`: optional ISO 8601 time bounds
+- **Log file**: The server always uses the `logs/logs.log` file in the user's working directory.
+- **Example call**:
+
+```json
+{
+  "tool": "read_log",
+  "args": {
+    "lines": 100,
+    "start_time": "2025-06-01T00:00:00Z",
+    "end_time": "2025-06-01T23:59:59Z"
+  }
+}
+```
+
+## Use Cases
+
+Here are several concrete examples of using logs and the `read_log` tool:
+
+- **Debugging a production error**:
+  - Read the last 200 lines of the log to identify a sequence of events leading to a critical error.
+  - Filter logs over a specific time range to isolate an incident.
+- **Verifying a new feature implementation**:
+  - Check that expected events (e.g., user creation, payment validated) appear in the logs after a deployment.
+- **Security audit**:
+  - Search for failed login attempts or suspicious accesses over a given period.
+- **Performance analysis**:
+  - Extract DEBUG-level logs to measure response times or detect slow endpoints.
+- **User support**:
+  - Retrieve a user's journey (via `user_id`) to understand a bug or complaint.
+- **Automated monitoring**:
+  - Integrate log reading into a script or external tool to generate alerts in case of detected anomalies.
+- **Migration or refactoring validation**:
+  - Compare logs before/after a migration to ensure no regressions.
+
+> **Simplicity advantage**: With the simplified interface, you no longer need to specify the log file path. The server automatically uses `logs/logs.log` in your working directory, making usage much simpler and more consistent.
+
+## Best Practices
+
+- Never include sensitive information in logs.
+- Always validate the format before writing.
+- Use the provided tools for reading and analysis (do not parse manually).
+- PRs must be reviewed to check log compliance.
