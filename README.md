@@ -1,8 +1,8 @@
-# Mcp-log-server
+# mcp-log-reader
 
 ## Overview
 
-`mcp-log-server` is an MCP-compatible log server for structured JSON logging and log analysis, designed to work seamlessly with editors like Cursor, VSCode, and others supporting the Model Control Protocol (MCP).
+`mcp-log-reader` is an MCP-compatible log server for structured JSON logging and log analysis, designed to work seamlessly with editors like Cursor, VSCode, and others supporting the Model Control Protocol (MCP).
 
 ---
 
@@ -10,17 +10,17 @@
 
 ### Installation
 
-You can use `mcp-log-server` directly with npx (no global install required):
+You can use `mcp-log-reader` directly with npx (no global install required):
 
 ```sh
-npx mcp-log-server init   # Initialize MCP config and rules in your project
-npx mcp-log-server start  # Start the MCP log server
+npx mcp-log-reader init   # Initialize MCP config and rules in your project
+npx mcp-log-reader start  # Start the MCP log server
 ```
 
 Or add it as a dev dependency:
 
 ```sh
-npm install --save-dev mcp-log-server
+npm install --save-dev mcp-log-reader
 ```
 
 ### Initialization
@@ -28,7 +28,7 @@ npm install --save-dev mcp-log-server
 Run the following command in your project root:
 
 ```sh
-npx mcp-log-server init
+npx mcp-log-reader init
 ```
 
 - This will create or update `.cursor/mcp.json` with the correct server entry.
@@ -37,7 +37,7 @@ npx mcp-log-server init
 ### Starting the Server
 
 ```sh
-npx mcp-log-server start
+npx mcp-log-reader start
 ```
 
 - The server will be available for your editor's MCP integration.
@@ -52,9 +52,9 @@ npx mcp-log-server start
 ```json
 {
   "mcpServers": {
-    "mcp-log-server": {
+    "mcp-log-reader": {
       "command": "npx",
-      "args": ["-y", "mcp-log-server"]
+      "args": ["-y", "mcp-log-reader"]
     }
   },
   "mcp.enabled": true,
@@ -84,14 +84,14 @@ npx mcp-log-server start
 - Fork the repository and create a feature branch.
 - Use conventional commits for all changes.
 - Run `npm run build` to compile TypeScript sources.
-- Test your changes locally with `npx mcp-log-server start`.
+- Test your changes locally with `npx mcp-log-reader start`.
 - Open a pull request with a clear description of your changes.
 
 ### Project Structure
 
 - `src/` — TypeScript source code
 - `bin/cli.js` — CLI entry point (init/start)
-- `init-mcp-log-server.js` — Initialization script
+- `init-mcp-log-reader.js` — Initialization script
 - `templates/` — MCP config and workflow templates
 - `.github/workflows/` — CI/CD workflows
 

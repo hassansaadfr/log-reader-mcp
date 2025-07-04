@@ -1,11 +1,11 @@
 {
-  "name": "mcp-log-server",
+  "name": "mcp-log-reader",
   "version": "1.0.0",
   "main": "dist/mcp-server.js",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hassansaadfr/mcp-log-server.git"
+    "url": "git+https://github.com/hassansaadfr/mcp-log-reader.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -52,6 +52,6 @@
     ]
   },
   "bin": {
-    "mcp-log-server": "bin/cli.js"
+    "mcp-log-reader": "bin/cli.js"
   }
 }

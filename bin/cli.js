@@ -5,7 +5,7 @@ import path from "path";
 const [, , cmd, ...args] = process.argv;
 
 function runInit() {
-  const script = path.resolve("scripts/init-mcp-log-server.js");
+  const script = path.resolve("scripts/init-mcp-log-reader.js");
   const child = spawn("node", [script, ...args], { stdio: "inherit" });
   child.on("exit", (code) => process.exit(code));
 }
@@ -21,7 +21,7 @@ function runServer() {
 
 function showHelp() {
   console.log(
-    `Usage: mcp-log-server <command>\n\nCommands:\n  init     Initialise la configuration MCP dans .cursor\n  start    Démarre le serveur MCP\n  help     Affiche cette aide\n`
+    `Usage: mcp-log-reader <command>\n\nCommands:\n  init     Initialise la configuration MCP dans .cursor\n  start    Démarre le serveur MCP\n  help     Affiche cette aide\n`
   );
 }
 

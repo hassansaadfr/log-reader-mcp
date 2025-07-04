@@ -1,5 +1,5 @@
 ---
-description: Guide for using mcp-log-server
+description: Guide for using mcp-log-reader
 globs: **/*
 alwaysApply: true
 ---

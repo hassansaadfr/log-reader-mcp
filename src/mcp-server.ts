@@ -8,7 +8,7 @@ const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
 
 const server = new McpServer({
-  name: "mcp-log-server",
+  name: "mcp-log-reader",
   version,
   capabilities: {
     tools: {
