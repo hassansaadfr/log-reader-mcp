@@ -24,22 +24,10 @@ server.tool(
   "read_log",
   "Read the last N lines of the specified log file (each line must be a valid JSON log entry). Optionally filter by time interval.",
   {
-    logPath: z
-      .string()
-      .describe("Absolute path to the log file (.log or .txt)"),
-    lines: z
-      .number()
-      .optional()
-      .default(50)
-      .describe("Number of lines to read (default: 50)"),
-    start_time: z
-      .string()
-      .optional()
-      .describe("Start of the time interval (ISO 8601)"),
-    end_time: z
-      .string()
-      .optional()
-      .describe("End of the time interval (ISO 8601)"),
+    logPath: z.string().describe("Absolute path to the log file (.log or .txt)"),
+    lines: z.number().optional().default(50).describe("Number of lines to read (default: 50)"),
+    start_time: z.string().optional().describe("Start of the time interval (ISO 8601)"),
+    end_time: z.string().optional().describe("End of the time interval (ISO 8601)"),
   },
   async ({ logPath, lines, start_time, end_time }) => {
     try {
@@ -76,14 +64,12 @@ server.tool(
         content: [
           {
             type: "text",
-            text: `Error: ${
-              error instanceof Error ? error.message : String(error)
-            }`,
+            text: `Error: ${error instanceof Error ? error.message : String(error)}`,
           },
         ],
       };
     }
-  }
+  },
 );
 
 async function main(): Promise<void> {

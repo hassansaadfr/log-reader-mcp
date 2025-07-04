@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-export async function ensureLogsDir(baseDir: string) {
+export async function ensureLogsDir(baseDir: string): Promise<void> {
   const logsDir = path.join(baseDir, "logs");
   const logsFile = path.join(logsDir, "logs.log");
   await fs.mkdir(logsDir, { recursive: true });
@@ -15,8 +15,8 @@ export async function ensureLogsDir(baseDir: string) {
 export async function updateOrCreateMcpJson(
   cursorDir: string,
   templatePath: string,
-  serverKey: string
-) {
+  serverKey: string,
+): Promise<void> {
   const mcpJsonPath = path.join(cursorDir, "mcp.json");
   let template: Record<string, any>;
   try {

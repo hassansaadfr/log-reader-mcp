@@ -22,7 +22,7 @@ describe("init-utils", () => {
         },
         "mcp.enabled": true,
         "mcp.autoStart": true,
-      })
+      }),
     );
   });
 
@@ -40,9 +40,7 @@ describe("init-utils", () => {
 
   it("creates mcp.json from template if not exists", async () => {
     await updateOrCreateMcpJson(cursorDir, templatePath, "mcp-log-reader");
-    const mcpJson = JSON.parse(
-      await fs.readFile(path.join(cursorDir, "mcp.json"), "utf-8")
-    );
+    const mcpJson = JSON.parse(await fs.readFile(path.join(cursorDir, "mcp.json"), "utf-8"));
     expect(mcpJson.mcpServers["mcp-log-reader"]).toEqual({ foo: "bar" });
     expect(mcpJson["mcp.enabled"]).toBe(true);
     expect(mcpJson["mcp.autoStart"]).toBe(true);
@@ -52,7 +50,7 @@ describe("init-utils", () => {
     const mcpJsonPath = path.join(cursorDir, "mcp.json");
     await fs.writeFile(
       mcpJsonPath,
-      JSON.stringify({ mcpServers: { other: { a: 1 } }, "mcp.enabled": false })
+      JSON.stringify({ mcpServers: { other: { a: 1 } }, "mcp.enabled": false }),
     );
     await updateOrCreateMcpJson(cursorDir, templatePath, "mcp-log-reader");
     const mcpJson = JSON.parse(await fs.readFile(mcpJsonPath, "utf-8"));
@@ -65,7 +63,7 @@ describe("init-utils", () => {
     const mcpJsonPath = path.join(cursorDir, "mcp.json");
     await fs.writeFile(
       mcpJsonPath,
-      JSON.stringify({ mcpServers: { "mcp-log-reader": { baz: 42 } } })
+      JSON.stringify({ mcpServers: { "mcp-log-reader": { baz: 42 } } }),
     );
     await updateOrCreateMcpJson(cursorDir, templatePath, "mcp-log-reader");
     const mcpJson = JSON.parse(await fs.readFile(mcpJsonPath, "utf-8"));

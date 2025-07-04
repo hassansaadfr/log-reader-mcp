@@ -49,13 +49,9 @@ describe("readAndValidateLogs", () => {
     expect(result.length).toBe(0);
   });
   it("throws on invalid file", async () => {
-    await expect(
-      readAndValidateLogs({ logPath: "notfound.log" })
-    ).rejects.toThrow();
+    await expect(readAndValidateLogs({ logPath: "notfound.log" })).rejects.toThrow();
   });
   it("throws on invalid extension", async () => {
-    await expect(
-      readAndValidateLogs({ logPath: "test.invalid" })
-    ).rejects.toThrow();
+    await expect(readAndValidateLogs({ logPath: "test.invalid" })).rejects.toThrow();
   });
 });

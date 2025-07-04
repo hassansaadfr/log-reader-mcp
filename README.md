@@ -64,7 +64,6 @@ npx mcp-log-reader init
    npm install --save-dev mcp-log-reader
    ```
 2. **Create the config file**
-
    - At the root of your project, create a folder named `.cursor` (if it doesn't exist).
    - Inside `.cursor/`, create a file named `mcp.json` with:
 
@@ -225,7 +224,6 @@ To help Cursor (or any MCP-compatible AI) understand your log structure and best
 ### How to add the Cursor rule
 
 1. **Copy the template**
-
    - Use the command: `npx mcp-log-reader init` (recommended)
    - Or manually copy `templates/mcp-log-server/workflow.mdc` to `.cursor/mcp-log-reader/workflow.mdc` at the root of your project.
 
