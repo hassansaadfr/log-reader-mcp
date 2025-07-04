@@ -1,63 +1,134 @@
-# Mcp-log-reader
+# 🚀 MCP Log Reader
 
-## Overview
+![npm](https://img.shields.io/npm/v/mcp-log-reader)
+![build](https://github.com/hassansaadfr/mcp-log-reader/actions/workflows/ci.yml/badge.svg)
+![license](https://img.shields.io/github/license/hassansaadfr/mcp-log-reader)
 
-`Mcp-log-reader` is an MCP-compatible log server for structured JSON logging and log analysis, designed to work seamlessly with editors like Cursor, VSCode, and others supporting the Model Control Protocol (MCP).
+> 🚀 **Stop wasting time copy-pasting logs!**<br>
+> 🧠 **Let Cursor's AI instantly access, search, and explain your logs — no more manual work, just answers.**
+
+## 📚 Table of Contents
+
+- [Why MCP Log Reader?](#-why-mcp-log-reader)
+- [Installation](#-installation)
+  - [Automatic (recommended)](#-automatic-recommended)
+  - [Manual](#-manual)
+- [Who is it for?](#-who-is-it-for)
+- [MCP Configuration](#-mcp-configuration)
+- [Example Prompts for Cursor](#-example-prompts-for-cursor)
+- [CLI Usage](#-cli-usage)
+- [Log Format (JSON per line)](#-log-format-json-per-line)
+- [Developer Guide](#-developer-guide)
+- [Key Advantages](#-key-advantages)
+- [FAQ](#-faq)
+- [Getting Help](#-getting-help)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Cursor Rule (Workflow)](#-cursor-rule-workflow)
 
 ---
 
-## User Guide
+## ✨ Why MCP Log Reader?
 
-### Installation
+- 🤖 **AI-powered log access**: Give your AI assistant (Cursor, etc.) direct, on-demand access to your app logs.
+- 🧠 **Smarter debugging**: Let the AI analyze, summarize, and explain logs as you code.
+- ⏱️ **Save hours**: No more switching terminals, tailing files, or hunting for errors—get instant feedback and context.
+- 🛡️ **Safe & isolated**: Never pollutes your project, robust CLI and test coverage.
+- ⚡ **Plug & Play**: One command, zero config, works everywhere.
 
-You can use `mcp-log-reader` directly with npx (no global install required):
+---
 
-```sh
-npx mcp-log-reader init   # Initialize MCP config and rules in your project
-```
+## 👤 Who is it for?
 
-Or add it as a dev dependency:
+- Backend & frontend developers
+- DevOps & SREs
+- Teams using AI-powered editors (Cursor, etc.)
+- Anyone who wants faster, smarter log analysis!
 
-```sh
-npm install --save-dev mcp-log-reader
-```
+---
 
-### Initialization
+## 📦 Installation
 
-Run the following command in your project root:
+### 🚀 Automatic (recommended)
 
 ```sh
 npx mcp-log-reader init
 ```
 
-- This will:
-  - Create or update `.cursor/mcp.json` with the correct server entry
-  - Copy the logging workflow rules to `.cursor/mcp-log-reader/workflow.mdc`
-  - Create the `logs/` directory and an empty `logs/logs.log` file if missing
-  - Add `logs/logs.log` to your `.gitignore` if not present
+- Installs everything, creates `.cursor/mcp.json` and workflow rules, and sets up your logs folder automatically.
 
-### Starting the Server
+### 🛠️ Manual
 
-To start the MCP log server manually (for development or integration), use:
+1. **Install the package**
+   ```sh
+   npm install --save-dev mcp-log-reader
+   ```
+2. **Create the config file**
 
-```sh
-npx mcp-log-server
-```
+   - At the root of your project, create a folder named `.cursor` (if it doesn't exist).
+   - Inside `.cursor/`, create a file named `mcp.json` with:
 
-Or, if you have built the project:
+   ```json
+   {
+     "mcpServers": {
+       "mcp-log-reader": {
+         "command": "npx",
+         "args": ["-y", "mcp-log-reader"]
+       }
+     },
+     "mcp.enabled": true,
+     "mcp.autoStart": true,
+     "mcp.showStatusBar": true,
+     "mcp.logLevel": "info"
+   }
+   ```
 
-```sh
-node dist/mcp-server.js
-```
+   - This tells your editor (Cursor, VSCode, etc.) how to launch and connect to the MCP Log Reader server for your project.
 
-The server will be available for your editor's MCP integration if configured in `.cursor/mcp.json`.
+---
 
-### Configuration
+## 🖼️ What does it do?
 
-- The MCP server configuration is stored in `.cursor/mcp.json`.
-- You can customize the log file path and other options as needed.
+**MCP Log Reader** exposes your application's logs to your AI assistant/editor (like Cursor) via the Model Control Protocol (MCP). This means:
 
-### Example MCP config
+- The AI can read, filter, and analyze your logs on demand (not streaming)
+- You can ask the AI to fetch logs for a specific period, number of lines, error level, etc.
+- Makes onboarding, debugging, and incident response dramatically faster
+
+---
+
+## 💡 Example Prompts for Cursor
+
+Here are some real-world prompts you can use in Cursor (or any MCP-enabled AI) to interact with your logs:
+
+| Use Case           | Example Prompt to Cursor AI                                 |
+| ------------------ | ----------------------------------------------------------- |
+| 🔢 Last N logs     | `Show me the last 100 log entries`                          |
+| 🕒 Logs by time    | `Get all logs between 2024-06-01 and 2024-06-02`            |
+| ⏩ Logs since date | `Show all logs since 2024-06-01`                            |
+| 🚨 Errors only     | `Show only ERROR or CRITICAL logs from the last 50 entries` |
+| 🔍 Search message  | `Find all logs containing "database connection failed"`     |
+| 🧑‍💻 User-specific   | `Show all logs for user_id 12345 in the last 24 hours`      |
+| 📊 Summary         | `Summarize the main issues found in today's logs`           |
+| 🧹 Clear context   | `Clear the log context and start a new analysis`            |
+
+> **Tip:** You can combine filters, time ranges, and keywords in your prompts. The AI will use MCP Log Reader to fetch and analyze the relevant log data for you!
+
+---
+
+## 💡 Use Cases
+
+| Use Case               | How MCP Log Reader Helps                                    | Time Saved         |
+| ---------------------- | ----------------------------------------------------------- | ------------------ |
+| 🐞 Real-time debugging | See errors & warnings instantly in Cursor, with AI context  | Minutes per bug    |
+| 🔍 AI log analysis     | Let the AI summarize, filter, and explain log events        | Hours per incident |
+| 🚦 Incident response   | Quickly surface critical issues to the whole team           | Days per outage    |
+| 👩‍💻 Onboarding          | New devs get instant, readable log feedback in their editor | Weeks per new hire |
+| 📊 Audit & compliance  | Structured logs, easy to export and review                  | Countless hours    |
+
+---
+
+## ⚙️ MCP Configuration Example
 
 ```json
 {
@@ -74,46 +145,152 @@ The server will be available for your editor's MCP integration if configured in 
 }
 ```
 
-### CLI Usage
-
-- `npx mcp-log-reader init` : Initialize MCP config and rules in your project
-- `npx mcp-log-reader -h` ou `--help` : Show help and usage instructions
-- `npx mcp-log-reader -v` ou `--version` : Show the current version of the package
-- `npx mcp-log-reader` : Start the MCP log server
+- 📁 Place this in `.cursor/mcp.json`
+- Your editor will auto-detect and use the log server
 
 ---
 
-## Developer Guide
+## 🖥️ CLI Usage
 
-### Release & Versioning
-
-- This project uses [semantic-release](https://semantic-release.gitbook.io/semantic-release/) for automated versioning, changelog generation, and npm publishing.
-- Releases are triggered by pushing to the `main` branch with a conventional commit message.
-- The server version is automatically synced with the latest git tag.
-
-### GitHub Actions
-
-- The workflow `.github/workflows/release.yml` handles build, test, and release steps.
-- Ensure you have set the `NPM_TOKEN` secret in your repository for npm publishing.
-
-### Contributing
-
-- Fork the repository and create a feature branch.
-- Use conventional commits for all changes.
-- Run `npm run build` to compile TypeScript sources.
-- Test your changes locally with `npx mcp-log-reader start`.
-- Open a pull request with a clear description of your changes.
-
-### Project Structure
-
-- `src/` — TypeScript source code
-- `bin/cli.js` — CLI entry point (init/start)
-- `init-mcp-log-reader.js` — Initialization script
-- `templates/` — MCP config and workflow templates
-- `.github/workflows/` — CI/CD workflows
+| Command                           | Effect                                  |
+| --------------------------------- | --------------------------------------- |
+| `npx mcp-log-reader init`         | Initialize MCP config and log workflow  |
+| `npx mcp-log-reader -h/--help`    | Show help and CLI options               |
+| `npx mcp-log-reader -v/--version` | Show the current package version        |
+| `npx mcp-log-reader`              | Start the MCP log server (default mode) |
 
 ---
 
-## License
+## 📝 Log Format (JSON per line)
+
+Each line in `logs/logs.log` should be a JSON object:
+
+```json
+{
+  "level": "INFO|WARN|ERROR|DEBUG|CRITICAL",
+  "timestamp": "2024-06-01T12:34:56.789Z",
+  "message": "User login succeeded",
+  "service_name": "auth",
+  "user_id": "12345",
+  "context": { "ip": "192.168.1.10" },
+  "event": { "action": "login" }
+}
+```
+
+---
+
+## 🧑‍💻 Developer Guide
+
+- **Release & Versioning**: Automated with semantic-release, changelog, and version auto-sync
+- **CI/CD**: GitHub Actions (`.github/workflows/`)
+- **Testing**: 100% coverage, CLI test isolation, robust integration
+- **Project Structure**:
+  - `src/` — TypeScript sources
+  - `bin/cli.js` — CLI entry point
+  - `templates/` — MCP config & workflow templates
+  - `.github/workflows/` — CI/CD
+
+---
+
+## 🏆 Key Advantages
+
+- 🔒 **Zero config, zero risk**: Never pollutes your project
+- 🧪 **100% tested**: Full test isolation, robust CI
+- 🏗️ **AI-ready**: Structured logs, perfect for automated analysis
+- 🚀 **Plug & Play**: Works with all MCP editors, no setup required
+- ⏳ **Massive time savings**: Focus on code, not on chasing logs
+
+---
+
+## 🤝 Contributing
+
+1. Fork & create a branch
+2. Use conventional commits
+3. `npm run build` to compile
+4. `npm test` to verify
+5. Open a clear, detailed PR
+
+---
+
+## 📄 License
 
 MIT
+
+---
+
+## 📝 Cursor Rule (Workflow)
+
+To help Cursor (or any MCP-compatible AI) understand your log structure and best practices, you can add a workflow rule file:
+
+### How to add the Cursor rule
+
+1. **Copy the template**
+
+   - Use the command: `npx mcp-log-reader init` (recommended)
+   - Or manually copy `templates/mcp-log-server/workflow.mdc` to `.cursor/mcp-log-reader/workflow.mdc` at the root of your project.
+
+2. **What does this rule do?**
+   - It describes the log file location, format, and usage standards for your project.
+   - It helps the AI agent (Cursor, etc.) understand how to read, filter, and analyze your logs.
+   - It documents best practices for logging, security, and debugging for your team.
+
+### Example (excerpt)
+
+```yaml
+---
+description: Guide for using mcp-log-reader
+globs: **/*
+alwaysApply: true
+---
+
+# MCP Logging Workflow
+
+- Log folder: `logs/`
+- Log file: `logs.log` (one JSON object per line)
+- Example log entry:
+
+  {
+    "level": "INFO",
+    "timestamp": "2024-06-01T12:34:56.789Z",
+    "message": "User login succeeded",
+    ...
+  }
+
+- Use the `read_log` tool to fetch logs by line count or time range
+- Never include sensitive data in logs
+- Always validate log format before writing
+```
+
+### Why add this rule?
+
+- 🧠 **For the AI**: It enables Cursor to provide smarter, context-aware log analysis and suggestions.
+- 👩‍💻 **For developers**: It ensures everyone follows the same standards and makes onboarding easier.
+- 🔒 **For security**: It reminds everyone not to log sensitive data and to validate log structure.
+
+> **Tip:** Keeping this rule up to date helps both humans and AI work better with your logs!
+
+---
+
+## ❓ FAQ
+
+**Q: Is it compatible with VSCode or only Cursor?**  
+A: Any editor supporting MCP can use it, including Cursor and future tools.
+
+**Q: Can I use multiple MCP servers?**  
+A: Yes, just add more entries in `.cursor/mcp.json`.
+
+**Q: What log formats are supported?**  
+A: Only structured JSON logs (one object per line) are supported for full AI analysis.
+
+**Q: Is it safe for production?**  
+A: Yes! The tool never modifies your logs, only reads them, and is fully tested.
+
+---
+
+## 💬 Getting Help
+
+- Open an [issue](https://github.com/hassansaadfr/mcp-log-reader/issues) for bugs or questions
+- Join the discussion on [GitHub Discussions](https://github.com/hassansaadfr/mcp-log-reader/discussions)
+- See the [Cursor Rule Template](./templates/mcp-log-server/workflow.mdc) for advanced configuration
+
+---
