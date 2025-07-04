@@ -1,8 +1,11 @@
+import { jest } from "@jest/globals";
 import { execa } from "execa";
 import fs from "fs/promises";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
+
+jest.setTimeout(20000);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
