@@ -14,7 +14,6 @@ You can use `mcp-log-reader` directly with npx (no global install required):
 
 ```sh
 npx mcp-log-reader init   # Initialize MCP config and rules in your project
-npx mcp-log-reader start  # Start the MCP log server
 ```
 
 Or add it as a dev dependency:
@@ -32,15 +31,23 @@ npx mcp-log-reader init
 ```
 
 - This will create or update `.cursor/mcp.json` with the correct server entry.
-- It will also copy the logging workflow rules to `.cursor/workflow.mdc`.
+- It will also copy the logging workflow rules to `.cursor/mcp-log-reader/workflow.mdc`.
 
 ### Starting the Server
 
+To start the MCP log server manually (for development or integration), use:
+
 ```sh
-npx mcp-log-reader start
+npx mcp-log-server
 ```
 
-- The server will be available for your editor's MCP integration.
+Or, if you have built the project:
+
+```sh
+node dist/mcp-server.js
+```
+
+The server will be available for your editor's MCP integration if configured in `.cursor/mcp.json`.
 
 ### Configuration
 

@@ -5,8 +5,8 @@ import path from "path";
 const CURSOR_DIR = path.resolve(process.cwd(), ".cursor");
 const CURSOR_MCP_JSON = path.join(CURSOR_DIR, "mcp.json");
 const TEMPLATE_MCP_JSON = path.resolve("templates/mcp.json");
-const TEMPLATE_RULES = path.resolve("templates/mcp-log-reader/workflow.mdc");
-const CURSOR_RULES = path.join(CURSOR_DIR, "workflow.mdc");
+const TEMPLATE_RULES = path.resolve("templates/mcp-log-server/workflow.mdc");
+const CURSOR_RULES = path.join(CURSOR_DIR, "mcp-log-reader", "workflow.mdc");
 
 async function ensureCursorDir() {
   try {
@@ -40,6 +40,8 @@ async function mergeMcpJson() {
 }
 
 async function copyRules() {
+  const rulesDir = path.dirname(CURSOR_RULES);
+  await fs.mkdir(rulesDir, { recursive: true });
   await fs.copyFile(TEMPLATE_RULES, CURSOR_RULES);
   console.log("Copied rules to", CURSOR_RULES);
 }
