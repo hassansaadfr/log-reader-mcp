@@ -1,40 +1,34 @@
----
-description: Guide for using log-reader-mcp
-globs: **/*
-alwaysApply: true
----
-
 # MCP Logging Workflow
 
-Ce guide définit les standards pour la gestion des logs dans un projet utilisant le serveur MCP. Il s'adresse à l'agent AI et à toute personne développant sur ce projet.
+This guide defines the standards for log management in a project using the MCP server. It is intended for the AI agent and anyone developing on this project.
 
-## Structure et Emplacement des Logs
+## Log Structure and Location
 
-- **Dossier obligatoire** : Chaque projet doit contenir un dossier `logs/` à la racine.
-- **Fichier de log** : Le fichier principal de log doit être nommé `logs.log` et placé dans ce dossier.
+- **Required folder**: Every project must have a `logs/` folder at the root.
+- **Log file**: The main log file must be named `logs.log` and placed in this folder.
 
-## Format des Logs
+## Log Format
 
-- **Format JSON structuré** : Chaque ligne du fichier `logs.log` doit être un objet JSON respectant le schéma suivant (voir aussi la définition dans `@mcp-server.ts`) :
+- **Structured JSON format**: Each line in the `logs.log` file must be a JSON object following the schema below (see also the definition in `@mcp-server.ts`):
 
 ```json
 {
   "level": "INFO|WARN|ERROR|DEBUG|CRITICAL",
   "timestamp": "YYYY-MM-DDTHH:MM:SS.sssZ",
   "message": "string",
-  "service_name": "string (optionnel)",
-  "user_id": "string (optionnel)",
-  "context": { ... } (optionnel),
-  "event": { ... } (optionnel)
+  "service_name": "string (optional)",
+  "user_id": "string (optional)",
+  "context": { ... } (optional),
+  "event": { ... } (optional)
 }
 ```
 
-- **Exemple** :
+- **Example**:
 
 ```json
 {
   "level": "INFO",
-  "timestamp": "2024-06-01T12:34:56.789Z",
+  "timestamp": "2025-06-01T12:34:56.789Z",
   "message": "User login succeeded",
   "service_name": "auth",
   "user_id": "12345",
@@ -43,52 +37,53 @@ Ce guide définit les standards pour la gestion des logs dans un projet utilisan
 }
 ```
 
-- **Respect du schéma** : Utilisez toujours la fonction utilitaire de logging du projet (ou l'API MCP) pour garantir la conformité du format. N'écrivez jamais directement dans le fichier sans validation.
+- **Schema compliance**: Always use the project's logging utility function (or the MCP API) to ensure format compliance. Never write directly to the file without validation.
 
-## Utilisation de l'outil `read_log`
+## Using the `read_log` Tool
 
-- **Outil MCP** : Le serveur expose l'outil `read_log` permettant de lire les dernières lignes du fichier de log, avec possibilité de filtrer par intervalle de temps.
-- **Arguments principaux** :
-  - `logPath` : chemin absolu du fichier de log (doit être un `.log` ou `.txt`)
-  - `lines` : nombre de lignes à lire (défaut : 50)
-  - `start_time` / `end_time` : bornes temporelles ISO 8601 optionnelles
-- **Exemple d'appel** :
+- **MCP Tool**: The server exposes the `read_log` tool to read the last lines of the log file, with optional time interval filtering.
+- **Main arguments**:
+  - `lines`: number of lines to read (default: 50)
+  - `start_time` / `end_time`: optional ISO 8601 time bounds
+- **Log file**: The server always uses the `logs/logs.log` file in the user's working directory.
+- **Example call**:
 
 ```json
 {
   "tool": "read_log",
   "args": {
-    "logPath": "/chemin/vers/logs/logs.log",
     "lines": 100,
-    "start_time": "2024-06-01T00:00:00Z",
-    "end_time": "2024-06-01T23:59:59Z"
+    "start_time": "2025-06-01T00:00:00Z",
+    "end_time": "2025-06-01T23:59:59Z"
   }
 }
 ```
 
-## Cas d'usage
+## Use Cases
 
-Voici plusieurs exemples concrets d'utilisation des logs et de l'outil `read_log` :
+Here are several concrete examples of using logs and the `read_log` tool:
 
-- **Déboguer une erreur de production** :
-  - Lire les 200 dernières lignes du log pour identifier une séquence d'événements menant à une erreur critique.
-  - Filtrer les logs sur une plage horaire précise pour isoler un incident.
-- **Vérifier l'implémentation d'une nouvelle fonctionnalité** :
-  - Contrôler que les événements attendus (ex : création d'utilisateur, paiement validé) apparaissent bien dans les logs après un déploiement.
-- **Audit de sécurité** :
-  - Rechercher les tentatives de connexion échouées ou les accès suspects sur une période donnée.
-- **Analyse de performance** :
-  - Extraire les logs de niveau DEBUG pour mesurer les temps de réponse ou détecter des lenteurs sur certains endpoints.
-- **Support utilisateur** :
-  - Retrouver le parcours d'un utilisateur (via `user_id`) pour comprendre un bug ou une réclamation.
-- **Monitoring automatisé** :
-  - Intégrer la lecture des logs dans un script ou un outil externe pour générer des alertes en cas d'anomalie détectée.
-- **Validation de migration ou de refactoring** :
-  - Comparer les logs avant/après une migration pour s'assurer de l'absence de régressions.
+- **Debugging a production error**:
+  - Read the last 200 lines of the log to identify a sequence of events leading to a critical error.
+  - Filter logs over a specific time range to isolate an incident.
+- **Verifying a new feature implementation**:
+  - Check that expected events (e.g., user creation, payment validated) appear in the logs after a deployment.
+- **Security audit**:
+  - Search for failed login attempts or suspicious accesses over a given period.
+- **Performance analysis**:
+  - Extract DEBUG-level logs to measure response times or detect slow endpoints.
+- **User support**:
+  - Retrieve a user's journey (via `user_id`) to understand a bug or complaint.
+- **Automated monitoring**:
+  - Integrate log reading into a script or external tool to generate alerts in case of detected anomalies.
+- **Migration or refactoring validation**:
+  - Compare logs before/after a migration to ensure no regressions.
 
-## Bonnes Pratiques
+> **Simplicity advantage**: With the simplified interface, you no longer need to specify the log file path. The server automatically uses `logs/logs.log` in your working directory, making usage much simpler and more consistent.
 
-- Ne jamais inclure d'informations sensibles dans les logs.
-- Toujours valider le format avant écriture.
-- Utiliser les outils fournis pour la lecture et l'analyse (ne pas parser manuellement).
-- Les PRs doivent être relues pour vérifier la conformité des logs.
+## Best Practices
+
+- Never include sensitive information in logs.
+- Always validate the format before writing.
+- Use the provided tools for reading and analysis (do not parse manually).
+- PRs must be reviewed to check log compliance.

@@ -54,4 +54,9 @@ describe('readAndValidateLogs', () => {
   it('throws on invalid extension', async () => {
     await expect(readAndValidateLogs({ logPath: 'test.invalid' })).rejects.toThrow();
   });
+  it('throws on empty logPath', async () => {
+    await expect(readAndValidateLogs({ logPath: '' })).rejects.toThrow(
+      'No log file path provided.',
+    );
+  });
 });

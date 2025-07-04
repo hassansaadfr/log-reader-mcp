@@ -46,16 +46,16 @@ describe('CLI', () => {
   });
 
   it('runs init without error (dry run)', async () => {
-    // On ne vérifie pas l'effet, juste que ça ne crash pas
+    // We do not check the effect, just that it does not crash
     const { exitCode } = await execa('node', [cliPath, 'init'], {
       reject: false,
       cwd: tmpDir,
     });
-    expect([0, 1]).toContain(exitCode); // 0 = succès, 1 = déjà initialisé ou erreur mineure
+    expect([0, 1]).toContain(exitCode); // 0 = success, 1 = already initialized or minor error
   });
 
   it('runs server by default (dry run)', async () => {
-    // On lance le serveur, on attend un peu, puis on tue le process et on vérifie la sortie
+    // Start the server, wait a bit, then kill the process and check the output
     const subprocess = execa('node', [cliPath], { reject: false, cwd: tmpDir });
     let output = '';
     subprocess.stdout?.on('data', (data) => {

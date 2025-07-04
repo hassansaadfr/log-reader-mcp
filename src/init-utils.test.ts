@@ -17,7 +17,7 @@ describe('init-utils', () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mcp-init-test-'));
     cursorDir = path.join(tmpDir, '.cursor');
     await fs.mkdir(cursorDir, { recursive: true });
-    // Crée un template mcp.json minimal
+    // Create a minimal mcp.json template
     templatePath = path.join(tmpDir, 'template.json');
     await fs.writeFile(
       templatePath,
@@ -61,7 +61,7 @@ describe('init-utils', () => {
     const mcpJson = JSON.parse(await fs.readFile(mcpJsonPath, 'utf-8'));
     expect(mcpJson.mcpServers['log-reader-mcp']).toEqual({ foo: 'bar' });
     expect(mcpJson.mcpServers['other']).toEqual({ a: 1 });
-    expect(mcpJson['mcp.enabled']).toBe(false); // ne doit pas écraser
+    expect(mcpJson['mcp.enabled']).toBe(false); // should not overwrite
   });
 
   it('does not overwrite log-reader-mcp if already present', async () => {

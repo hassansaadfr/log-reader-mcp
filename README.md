@@ -94,6 +94,14 @@ npx log-reader-mcp init
 - You can ask the AI to fetch logs for a specific period, number of lines, error level, etc.
 - Makes onboarding, debugging, and incident response dramatically faster
 
+### 🔧 Key Features
+
+- **Simplified Interface**: No `logPath` parameter needed - always uses `logs/logs.log` in your working directory
+- **Automatic Detection**: The server automatically finds and reads your log file
+- **Time-based Filtering**: Filter logs by specific time ranges using ISO 8601 format
+- **Line-based Reading**: Read the last N lines with automatic validation
+- **Structured JSON**: Full support for structured logging with metadata
+
 ---
 
 ## 💡 Example Prompts for Cursor
@@ -110,6 +118,8 @@ Here are some real-world prompts you can use in Cursor (or any MCP-enabled AI) t
 | 🧑‍💻 User-specific   | `Show all logs for user_id 12345 in the last 24 hours`      |
 | 📊 Summary         | `Summarize the main issues found in today's logs`           |
 | 🧹 Clear context   | `Clear the log context and start a new analysis`            |
+
+> **Note:** The tool automatically uses `logs/logs.log` in your current working directory. The `logPath` parameter has been removed for maximum simplicity - no need to specify any file path!
 
 > **Tip:** You can combine filters, time ranges, and keywords in your prompts. The AI will use Log Reader Mcp to fetch and analyze the relevant log data for you!
 

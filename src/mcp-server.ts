@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createRequire } from 'module';
+import path from 'path';
 import { z } from 'zod';
 import { readAndValidateLogs } from './log-utils.js';
 
@@ -22,15 +23,17 @@ const server = new McpServer({
 
 server.tool(
   'read_log',
-  'Read the last N lines of the specified log file (each line must be a valid JSON log entry). Optionally filter by time interval.',
+  'Read the last N lines of the logs.log file in the logs directory of the current working directory. Optionally filter by time interval.',
   {
-    logPath: z.string().describe('Absolute path to the log file (.log or .txt)'),
     lines: z.number().optional().default(50).describe('Number of lines to read (default: 50)'),
     start_time: z.string().optional().describe('Start of the time interval (ISO 8601)'),
     end_time: z.string().optional().describe('End of the time interval (ISO 8601)'),
   },
-  async ({ logPath, lines, start_time, end_time }) => {
+  async ({ lines, start_time, end_time }) => {
     try {
+      // Utiliser toujours le chemin relatif logs/logs.log dans le répertoire courant
+      const logPath = path.join(process.cwd(), 'logs', 'logs.log');
+
       const validLogs = await readAndValidateLogs({
         logPath,
         lines,

@@ -65,7 +65,7 @@ async function ensureLogsDir() {
   } catch {
     await fs.writeFile(logsFile, '');
   }
-  // Ajout à .gitignore
+  // Add to .gitignore
   const gitignorePath = path.resolve(process.cwd(), '.gitignore');
   let gitignore = '';
   try {
@@ -87,7 +87,7 @@ async function main() {
   await ensureLogsDir();
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((err) => {
+  console.error('Fatal error:', err);
   process.exit(1);
 });

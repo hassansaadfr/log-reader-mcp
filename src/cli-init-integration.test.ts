@@ -10,7 +10,7 @@ jest.setTimeout(20000);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Copie récursive d'un dossier (src -> dest)
+// Recursive copy of a folder (src -> dest)
 async function copyDir(src: string, dest: string): Promise<void> {
   await fs.mkdir(dest, { recursive: true });
   const entries = await fs.readdir(src, { withFileTypes: true });
@@ -31,41 +31,41 @@ describe('CLI integration: init in test project dir', () => {
   let tgzPath: string;
 
   beforeEach(async () => {
-    // Crée un dossier temporaire pour le projet de test
+    // Create a temporary folder for the test project
     testProjectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mcp-test-proj-'));
-    // Copie tout le projet courant dans ce dossier
+    // Copy the entire current project into this folder
     await copyDir(path.join(__dirname, '..'), testProjectDir);
-    // Génère le package tgz dans ce dossier de test
+    // Generate the package tgz in this test folder
     const { stdout } = await execa('npm', ['pack'], { cwd: testProjectDir });
     tgzPath = path.join(testProjectDir, stdout.trim());
-    // Crée un sous-dossier pour simuler l'utilisateur
+    // Create a subfolder to simulate the user
     tmpDir = path.join(testProjectDir, 'user-proj');
     await fs.mkdir(tmpDir);
-    // Installe le package localement dans le sous-dossier
+    // Install the package locally in the subfolder
     await execa('npm', ['install', tgzPath], { cwd: tmpDir });
   });
 
   afterEach(async () => {
-    // Supprime récursivement le dossier de test
+    // Recursively delete the test folder
     await fs.rm(testProjectDir, { recursive: true, force: true });
   });
 
   it('runs init and generates expected files in user project', async () => {
-    // Exécute la commande dans le sous-dossier utilisateur
+    // Run the command in the user subfolder
     await execa('npx', ['log-reader-mcp', 'init'], { cwd: tmpDir });
-    // Vérifie la présence des fichiers générés
+    // Check for the presence of generated files
     const cursorDir = path.join(tmpDir, '.cursor');
     const mcpJson = path.join(cursorDir, 'mcp.json');
     const rules = path.join(cursorDir, 'log-reader-mcp', 'workflow.mdc');
     const logsDir = path.join(tmpDir, 'logs');
     const logsFile = path.join(logsDir, 'logs.log');
     const gitignore = path.join(tmpDir, '.gitignore');
-    // Tous les fichiers/dossiers doivent exister
+    // All files/folders must exist
     await expect(fs.stat(mcpJson)).resolves.toBeDefined();
     await expect(fs.stat(rules)).resolves.toBeDefined();
     await expect(fs.stat(logsDir)).resolves.toBeDefined();
     await expect(fs.stat(logsFile)).resolves.toBeDefined();
-    // .gitignore doit contenir logs/logs.log
+    // .gitignore must contain logs/logs.log
     const gitignoreContent = await fs.readFile(gitignore, 'utf-8');
     expect(gitignoreContent).toMatch(/logs\/logs\.log/);
   });

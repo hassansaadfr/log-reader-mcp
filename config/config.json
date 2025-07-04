@@ -13,7 +13,8 @@
   "tools": {
     "read_log": {
       "enabled": true,
-      "maxLines": 1000
+      "maxLines": 1000,
+      "logPath": "logs/logs.log"
     }
   }
 }

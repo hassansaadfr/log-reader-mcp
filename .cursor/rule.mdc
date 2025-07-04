@@ -1,0 +1,149 @@
+---
+description: English rule
+globs: **/*
+alwaysApply: true
+---
+
+# English-Only Development Rule
+
+This rule enforces that all code, comments, and documentation must be written in English throughout the project.
+
+## Scope
+
+This rule applies to:
+
+- All source code files (`.ts`, `.js`, `.tsx`, `.jsx`, etc.)
+- All comments within code files
+- All documentation files (`.md`, `.mdx`, etc.)
+- All configuration files with text content
+- All README files and project documentation
+
+## Requirements
+
+### Code Files
+
+- **Variable names**: Must be in English
+- **Function names**: Must be in English
+- **Class names**: Must be in English
+- **Comments**: Must be in English
+- **String literals**: User-facing strings should be in English (use i18n for localization)
+- **Error messages**: Must be in English
+
+### Documentation Files
+
+- **README files**: Must be in English
+- **API documentation**: Must be in English
+- **Code comments**: Must be in English
+- **Inline documentation**: Must be in English
+
+### Configuration Files
+
+- **Comments in config files**: Must be in English
+- **Descriptive text**: Must be in English
+
+## Examples
+
+### ✅ Correct (English)
+
+```typescript
+// Initialize the user authentication service
+const authService = new AuthenticationService();
+
+/**
+ * Validates user credentials and returns authentication token
+ * @param username - The user's username
+ * @param password - The user's password
+ * @returns Promise<AuthToken>
+ */
+async function validateCredentials(username: string, password: string): Promise<AuthToken> {
+  // Check if user exists in database
+  const user = await findUserByUsername(username);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Verify password hash
+  const isValidPassword = await verifyPassword(password, user.passwordHash);
+
+  if (!isValidPassword) {
+    throw new Error('Invalid credentials');
+  }
+
+  return generateAuthToken(user);
+}
+```
+
+### ❌ Incorrect (French)
+
+```typescript
+// Initialiser le service d'authentification utilisateur
+const serviceAuth = new ServiceAuthentification();
+
+/**
+ * Valide les identifiants utilisateur et retourne le token d'authentification
+ * @param nomUtilisateur - Le nom d'utilisateur
+ * @param motDePasse - Le mot de passe
+ * @returns Promise<AuthToken>
+ */
+async function validerIdentifiants(nomUtilisateur: string, motDePasse: string): Promise<AuthToken> {
+  // Vérifier si l'utilisateur existe dans la base de données
+  const utilisateur = await trouverUtilisateurParNom(nomUtilisateur);
+
+  if (!utilisateur) {
+    throw new Error('Utilisateur non trouvé');
+  }
+
+  // Vérifier le hash du mot de passe
+  const motDePasseValide = await verifierMotDePasse(motDePasse, utilisateur.hashMotDePasse);
+
+  if (!motDePasseValide) {
+    throw new Error('Identifiants invalides');
+  }
+
+  return genererTokenAuth(utilisateur);
+}
+```
+
+## Enforcement
+
+- **Code Review**: All pull requests must be reviewed for English compliance
+- **Linting**: Use ESLint rules to catch non-English identifiers where possible
+- **Documentation**: All new documentation must be written in English
+- **Comments**: All code comments must be in English
+
+## Benefits
+
+- **International Collaboration**: English is the standard language for software development
+- **Code Maintainability**: Consistent language makes code easier to understand and maintain
+- **Open Source**: English makes the project accessible to the global developer community
+- **Professional Standards**: Follows industry best practices for international projects
+
+## Exceptions
+
+- **User Interface**: User-facing text can be localized using proper i18n systems
+- **Configuration**: Environment-specific configuration may use local language if required
+- **Legacy Code**: Existing non-English code should be gradually refactored to English
+
+## Migration Strategy
+
+For existing non-English code:
+
+1. **Phase 1**: Ensure all new code follows this rule
+2. **Phase 2**: Refactor existing comments to English
+3. **Phase 3**: Refactor variable and function names to English
+4. **Phase 4**: Update documentation to English
+
+## Tools and Resources
+
+- **ESLint**: Configure rules to encourage English naming conventions
+- **Prettier**: Ensure consistent formatting
+- **Spell Check**: Use spell checkers to catch typos in English text
+- **Translation Tools**: Use proper i18n libraries for user-facing content
+
+Remember: **English is the lingua franca of software development**. This rule ensures our codebase remains accessible, maintainable, and professional for developers worldwide.
+description:
+globs:
+alwaysApply: false
+
+---
