@@ -1,0 +1,42 @@
+# Tests
+src/**/*.test.ts
+src/**/*.test.js
+src/**/*.spec.ts
+src/**/*.spec.js
+**/*.test.*
+**/*.spec.*
+test/
+tests/
+coverage/
+.nyc_output/
+.jest/
+
+# Development files
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+*.log
+
+# Source maps (optional - remove if you want to include them)
+*.map
+
+# Documentation
+README.md
+CHANGELOG.md
+ROADMAP.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db 

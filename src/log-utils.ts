@@ -1,9 +1,9 @@
-import { existsSync } from "fs";
-import { readFile } from "fs/promises";
-import { z } from "zod";
+import { existsSync } from 'fs';
+import { readFile } from 'fs/promises';
+import { z } from 'zod';
 
 export const LogEntrySchema = z.object({
-  level: z.enum(["INFO", "WARN", "ERROR", "DEBUG", "CRITICAL"]),
+  level: z.enum(['INFO', 'WARN', 'ERROR', 'DEBUG', 'CRITICAL']),
   timestamp: z.string(), // ISO string
   message: z.string(),
   service_name: z.string().optional(),
@@ -26,20 +26,20 @@ export async function readAndValidateLogs({
   end_time?: string;
 }): Promise<LogEntry[]> {
   if (!logPath) {
-    throw new Error("No log file path provided.");
+    throw new Error('No log file path provided.');
   }
   if (
-    logPath.includes("..") ||
+    logPath.includes('..') ||
     /\\/.test(logPath) ||
-    (!logPath.endsWith(".log") && !logPath.endsWith(".txt"))
+    (!logPath.endsWith('.log') && !logPath.endsWith('.txt'))
   ) {
-    throw new Error("Invalid logPath. Only .log and .txt files are allowed.");
+    throw new Error('Invalid logPath. Only .log and .txt files are allowed.');
   }
   if (!existsSync(logPath)) {
     throw new Error(`File ${logPath} does not exist.`);
   }
-  const content = await readFile(logPath, "utf-8");
-  const linesArray = content.split("\n").filter((line) => line.trim());
+  const content = await readFile(logPath, 'utf-8');
+  const linesArray = content.split('\n').filter((line) => line.trim());
   let validLogs: LogEntry[] = [];
   for (const line of linesArray.slice(-lines)) {
     try {

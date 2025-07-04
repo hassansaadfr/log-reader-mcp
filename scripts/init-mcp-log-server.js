@@ -15,12 +15,13 @@ const CURSOR_RULES = path.join(CURSOR_DIR, 'log-reader-mcp', 'workflow.mdc');
 async function ensureCursorDir() {
   try {
     await fs.mkdir(CURSOR_DIR, { recursive: true });
-  } catch {}
+  } catch {
+    // Directory might already exist, ignore error
+  }
 }
 
 async function mergeMcpJson() {
   let template;
-  let user;
   try {
     template = JSON.parse(await fs.readFile(TEMPLATE_MCP_JSON, 'utf-8'));
   } catch {
@@ -30,9 +31,14 @@ async function mergeMcpJson() {
   let userJson = {};
   try {
     userJson = JSON.parse(await fs.readFile(CURSOR_MCP_JSON, 'utf-8'));
-  } catch {}
+  } catch {
+    // File doesn't exist, start with empty config
+  }
   userJson.mcpServers = userJson.mcpServers || {};
-  userJson.mcpServers['mcp-log-server'] = template.mcpServers['mcp-log-server'];
+  userJson.mcpServers['log-reader-mcp'] = {
+    command: 'npx',
+    args: ['-y', 'log-reader-mcp'],
+  };
   // Merge other top-level keys if not present
   for (const key of Object.keys(template)) {
     if (key !== 'mcpServers' && !(key in userJson)) {
@@ -64,7 +70,9 @@ async function ensureLogsDir() {
   let gitignore = '';
   try {
     gitignore = await fs.readFile(gitignorePath, 'utf-8');
-  } catch {}
+  } catch {
+    // .gitignore doesn't exist, start with empty content
+  }
   if (!gitignore.includes('logs/logs.log')) {
     gitignore += (gitignore.endsWith('\n') || gitignore === '' ? '' : '\n') + 'logs/logs.log\n';
     await fs.writeFile(gitignorePath, gitignore);
