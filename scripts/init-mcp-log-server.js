@@ -53,10 +53,35 @@ async function copyRules() {
   console.log("Copied rules to", CURSOR_RULES);
 }
 
+async function ensureLogsDir() {
+  const logsDir = path.resolve(process.cwd(), "logs");
+  const logsFile = path.join(logsDir, "logs.log");
+  await fs.mkdir(logsDir, { recursive: true });
+  try {
+    await fs.access(logsFile);
+  } catch {
+    await fs.writeFile(logsFile, "");
+  }
+  // Ajout à .gitignore
+  const gitignorePath = path.resolve(process.cwd(), ".gitignore");
+  let gitignore = "";
+  try {
+    gitignore = await fs.readFile(gitignorePath, "utf-8");
+  } catch {}
+  if (!gitignore.includes("logs/logs.log")) {
+    gitignore +=
+      (gitignore.endsWith("\n") || gitignore === "" ? "" : "\n") +
+      "logs/logs.log\n";
+    await fs.writeFile(gitignorePath, gitignore);
+    console.log("Added logs/logs.log to .gitignore");
+  }
+}
+
 async function main() {
   await ensureCursorDir();
   await mergeMcpJson();
   await copyRules();
+  await ensureLogsDir();
 }
 
 main().catch((e) => {

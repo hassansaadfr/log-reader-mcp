@@ -30,8 +30,11 @@ Run the following command in your project root:
 npx mcp-log-reader init
 ```
 
-- This will create or update `.cursor/mcp.json` with the correct server entry.
-- It will also copy the logging workflow rules to `.cursor/mcp-log-reader/workflow.mdc`.
+- This will:
+  - Create or update `.cursor/mcp.json` with the correct server entry
+  - Copy the logging workflow rules to `.cursor/mcp-log-reader/workflow.mdc`
+  - Create the `logs/` directory and an empty `logs/logs.log` file if missing
+  - Add `logs/logs.log` to your `.gitignore` if not present
 
 ### Starting the Server
 
