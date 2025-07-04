@@ -1,4 +1,4 @@
-# mcp-log-server
+# Mcp-log-server
 
 ## Overview
 
