@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Copie récursive d'un dossier (src -> dest)
-async function copyDir(src: string, dest: string) {
+async function copyDir(src: string, dest: string): Promise<void> {
   await fs.mkdir(dest, { recursive: true });
   const entries = await fs.readdir(src, { withFileTypes: true });
   for (const entry of entries) {
