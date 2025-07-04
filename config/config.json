@@ -1,0 +1,19 @@
+{
+  "server": {
+    "name": "mcp-log-server",
+    "version": "1.0.0",
+    "description": "MCP server for log management"
+  },
+  "logs": {
+    "directory": "./logs",
+    "defaultLevel": "INFO",
+    "maxFileSize": "10MB",
+    "retention": "30d"
+  },
+  "tools": {
+    "read_log": {
+      "enabled": true,
+      "maxLines": 1000
+    }
+  }
+}

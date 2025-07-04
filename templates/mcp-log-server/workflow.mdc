@@ -1,0 +1,94 @@
+---
+description: Guide for using mcp-log-server
+globs: **/*
+alwaysApply: true
+---
+
+# MCP Logging Workflow
+
+Ce guide définit les standards pour la gestion des logs dans un projet utilisant le serveur MCP. Il s'adresse à l'agent AI et à toute personne développant sur ce projet.
+
+## Structure et Emplacement des Logs
+
+- **Dossier obligatoire** : Chaque projet doit contenir un dossier `logs/` à la racine.
+- **Fichier de log** : Le fichier principal de log doit être nommé `logs.log` et placé dans ce dossier.
+
+## Format des Logs
+
+- **Format JSON structuré** : Chaque ligne du fichier `logs.log` doit être un objet JSON respectant le schéma suivant (voir aussi la définition dans `@mcp-server.ts`) :
+
+```json
+{
+  "level": "INFO|WARN|ERROR|DEBUG|CRITICAL",
+  "timestamp": "YYYY-MM-DDTHH:MM:SS.sssZ",
+  "message": "string",
+  "service_name": "string (optionnel)",
+  "user_id": "string (optionnel)",
+  "context": { ... } (optionnel),
+  "event": { ... } (optionnel)
+}
+```
+
+- **Exemple** :
+
+```json
+{
+  "level": "INFO",
+  "timestamp": "2024-06-01T12:34:56.789Z",
+  "message": "User login succeeded",
+  "service_name": "auth",
+  "user_id": "12345",
+  "context": { "ip": "192.168.1.10" },
+  "event": { "action": "login" }
+}
+```
+
+- **Respect du schéma** : Utilisez toujours la fonction utilitaire de logging du projet (ou l'API MCP) pour garantir la conformité du format. N'écrivez jamais directement dans le fichier sans validation.
+
+## Utilisation de l'outil `read_log`
+
+- **Outil MCP** : Le serveur expose l'outil `read_log` permettant de lire les dernières lignes du fichier de log, avec possibilité de filtrer par intervalle de temps.
+- **Arguments principaux** :
+  - `logPath` : chemin absolu du fichier de log (doit être un `.log` ou `.txt`)
+  - `lines` : nombre de lignes à lire (défaut : 50)
+  - `start_time` / `end_time` : bornes temporelles ISO 8601 optionnelles
+- **Exemple d'appel** :
+
+```json
+{
+  "tool": "read_log",
+  "args": {
+    "logPath": "/chemin/vers/logs/logs.log",
+    "lines": 100,
+    "start_time": "2024-06-01T00:00:00Z",
+    "end_time": "2024-06-01T23:59:59Z"
+  }
+}
+```
+
+## Cas d'usage
+
+Voici plusieurs exemples concrets d'utilisation des logs et de l'outil `read_log` :
+
+- **Déboguer une erreur de production** :
+  - Lire les 200 dernières lignes du log pour identifier une séquence d'événements menant à une erreur critique.
+  - Filtrer les logs sur une plage horaire précise pour isoler un incident.
+- **Vérifier l'implémentation d'une nouvelle fonctionnalité** :
+  - Contrôler que les événements attendus (ex : création d'utilisateur, paiement validé) apparaissent bien dans les logs après un déploiement.
+- **Audit de sécurité** :
+  - Rechercher les tentatives de connexion échouées ou les accès suspects sur une période donnée.
+- **Analyse de performance** :
+  - Extraire les logs de niveau DEBUG pour mesurer les temps de réponse ou détecter des lenteurs sur certains endpoints.
+- **Support utilisateur** :
+  - Retrouver le parcours d'un utilisateur (via `user_id`) pour comprendre un bug ou une réclamation.
+- **Monitoring automatisé** :
+  - Intégrer la lecture des logs dans un script ou un outil externe pour générer des alertes en cas d'anomalie détectée.
+- **Validation de migration ou de refactoring** :
+  - Comparer les logs avant/après une migration pour s'assurer de l'absence de régressions.
+
+## Bonnes Pratiques
+
+- Ne jamais inclure d'informations sensibles dans les logs.
+- Toujours valider le format avant écriture.
+- Utiliser les outils fournis pour la lecture et l'analyse (ne pas parser manuellement).
+- Les PRs doivent être relues pour vérifier la conformité des logs.
