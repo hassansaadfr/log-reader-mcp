@@ -24,6 +24,8 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+      - name: Generate CHANGELOG.md
+        run: npx semantic-release --dry-run || true
       - name: Release
         if: ${{ success() }}
         env:
