@@ -264,4 +264,74 @@ describe('mergeMcpJson', () => {
     readFileSpy.mockRestore();
     writeFileSpy.mockRestore();
   });
+
+  it('should preserve existing code-assistant server when merging', async () => {
+    // Mock template file
+    const readFileSpy = jest.spyOn(fs, 'readFile').mockResolvedValueOnce(
+      JSON.stringify({
+        mcpServers: {
+          'log-reader-mcp': {
+            command: 'npx',
+            args: ['-y', 'log-reader-mcp'],
+          },
+        },
+        'mcp.enabled': true,
+        'mcp.autoStart': true,
+        'mcp.showStatusBar': true,
+        'mcp.logLevel': 'info',
+      }),
+    );
+
+    // Mock existing user file with code-assistant server
+    const existingConfig = {
+      mcpServers: {
+        'code-assistant': {
+          command: 'npx',
+          args: ['-y', '--package=code-assistant', 'code-assistant'],
+          env: {
+            CODE_ASSISTANT_TOKEN: 'token-demo',
+            CODE_ASSISTANT_REGION: 'eu-west-1',
+          },
+        },
+      },
+    };
+    readFileSpy.mockResolvedValueOnce(JSON.stringify(existingConfig));
+
+    // Mock write file
+    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValueOnce(undefined);
+
+    await mergeMcpJson(mockMcpJsonPath, mockTemplatePath);
+
+    // Verify writeFile was called with merged content preserving code-assistant
+    expect(writeFileSpy).toHaveBeenCalledWith(
+      mockMcpJsonPath,
+      JSON.stringify(
+        {
+          mcpServers: {
+            'code-assistant': {
+              command: 'npx',
+              args: ['-y', '--package=code-assistant', 'code-assistant'],
+              env: {
+                CODE_ASSISTANT_TOKEN: 'token-demo',
+                CODE_ASSISTANT_REGION: 'eu-west-1',
+              },
+            },
+            'log-reader-mcp': {
+              command: 'npx',
+              args: ['-y', 'log-reader-mcp'],
+            },
+          },
+          'mcp.enabled': true, // added from template
+          'mcp.autoStart': true, // added from template
+          'mcp.showStatusBar': true, // added from template
+          'mcp.logLevel': 'info', // added from template
+        },
+        null,
+        2,
+      ),
+    );
+
+    readFileSpy.mockRestore();
+    writeFileSpy.mockRestore();
+  });
 });
