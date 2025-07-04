@@ -2,7 +2,7 @@
 
 ![npm](https://img.shields.io/npm/v/log-reader-mcp)
 ![build](https://github.com/hassansaadfr/log-reader-mcp/actions/workflows/release.yml/badge.svg)
-![license](https://img.shields.io/github/license/hassansaadfr/log-reader-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > 🚀 **Stop wasting time copy-pasting logs!**<br>
 > 🧠 **Let Cursor's AI instantly access, search, and explain your logs — no more manual work, just answers.**
