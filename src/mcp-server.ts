@@ -70,7 +70,7 @@ server.tool(
         content: [
           {
             type: 'text',
-            text: `Error: ${error instanceof Error ? error.message : String(error)}`,
+            text: `Error reading logs: ${error instanceof Error ? error.message : String(error)}`,
           },
         ],
       };
