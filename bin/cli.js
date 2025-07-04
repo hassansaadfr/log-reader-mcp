@@ -2,6 +2,7 @@
 import chalk from "chalk";
 import { spawn } from "child_process";
 import fs from "fs";
+import { createRequire } from "module";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -9,6 +10,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const [, , cmd, ...args] = process.argv;
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 function showHelp() {
   console.log(chalk.bold.blue("\nMCP Log Server - Complete Setup Guide\n"));
@@ -50,7 +54,12 @@ function showHelp() {
   console.log(
     "\n  " + chalk.cyan("-h, --help") + "\tShow this help message and exit."
   );
-  console.log("  (no command)\tStart the MCP log server.");
+  console.log(
+    "  " + chalk.cyan("-v, --version") + "\tShow the current version and exit."
+  );
+  console.log(
+    "  " + chalk.cyan("(no command)") + "\tStart the MCP log server."
+  );
 
   console.log(chalk.bold("\nDESCRIPTION:"));
   console.log(
@@ -194,6 +203,10 @@ switch (cmd) {
   case "--help":
   case "-h":
     showHelp();
+    break;
+  case "--version":
+  case "-v":
+    console.log(version);
     break;
   case "init":
     runInit();
