@@ -17,7 +17,7 @@
     "dev": "tsx src/mcp-server.ts",
     "watch": "tsx watch src/mcp-server.ts",
     "release": "semantic-release",
-    "test": "jest"
+    "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -54,5 +54,11 @@
   },
   "bin": {
     "mcp-log-reader": "bin/cli.js"
-  }
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "scripts/",
+    "templates/"
+  ]
 }

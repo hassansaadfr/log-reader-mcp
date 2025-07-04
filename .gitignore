@@ -3,3 +3,4 @@ logs/
 .env
 .DS_Store 
 dist/
+logs/logs.log

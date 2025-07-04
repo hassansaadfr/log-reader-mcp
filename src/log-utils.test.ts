@@ -1,6 +1,10 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { LogEntrySchema, readAndValidateLogs } from "./log-utils";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe("LogEntrySchema", () => {
   it("validates a correct log entry", () => {
